@@ -1,0 +1,25 @@
+﻿@page
+@model Server.Pages.AboutModel
+@{
+	var title = "درباره ما";
+
+	ViewData["Title"] = title;
+}
+
+<h3>
+	@(title)
+</h3>
+
+<hr />
+
+<div class="row min-vh-100 align-content-center align-items-center">
+	<div class="col align-content-center">
+		من رحیم لطفی هستم دانشجو این دوره
+	</div>
+	<div class="col ">
+		<img class="rounded-circle w-100 h-100 " src="~/images/user-profile.jpg" alt="رحیم لطفی" asp-append-version=true />
+		
+	</div>
+</div>
+
+<hr />
