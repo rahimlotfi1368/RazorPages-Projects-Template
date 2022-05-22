@@ -6,6 +6,7 @@
       "library": "bootstrap@5.2.0-beta1",
       "destination": "wwwroot/lib/bootstrap/"
     },
+
     {
       "library": "bootstrap-icons@1.8.2",
       "destination": "wwwroot/lib/bootstrap-icons/"
@@ -15,10 +16,12 @@
       "library": "jquery@3.6.0",
       "destination": "wwwroot/lib/jquery/"
     },
+
     {
       "library": "jquery-validate@1.19.3",
       "destination": "wwwroot/lib/jquery-validate/"
     },
+
     {
       "library": "jquery-validation-unobtrusive@3.2.12",
       "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
@@ -28,9 +31,15 @@
       "library": "toastr.js@2.1.4",
       "destination": "wwwroot/lib/toastr/"
     },
+
     {
       "library": "tinymce@6.0.0",
       "destination": "wwwroot/lib/tinymce/"
+    },
+
+    {
+      "library": "flag-icon-css@6.4.3",
+      "destination": "wwwroot/lib/flag-icon-css/"
     }
   ]
 }

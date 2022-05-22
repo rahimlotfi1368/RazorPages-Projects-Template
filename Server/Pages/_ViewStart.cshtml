@@ -1,3 +1,19 @@
 ﻿@{
-    Layout = "Layouts/_DefaultLayout";
+    var cultureName = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
+
+    switch (cultureName)
+    {
+        case "fa":
+        case "ar":
+            {
+                Layout = "Layouts/RTL/_DefaultLayout";
+                break;
+            }
+
+        default:
+           {
+                Layout = "Layouts/LTR/_DefaultLayout";
+                break;
+           }
+    }
 }

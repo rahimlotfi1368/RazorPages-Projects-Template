@@ -5,6 +5,7 @@
 	{
 		public BasePageModel() : base()
 		{
+			
 		}
 	}
 }
