@@ -1,21 +1,32 @@
-﻿@{
-	var cultureName = System.Threading.Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
-	
-	if (cultureName!="fa")
+﻿@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions>? requestLocalizationOptions
+@{
+	if (requestLocalizationOptions==null || requestLocalizationOptions.Value==null)
 	{
-		<div class="d-flex">
-			<a href="/ChangeCulture?culture=fa" class="d-block nav-link text-dark">
-				فارسی
-				<span class="fi fi-ir"></span>
-			</a>
-		</div>
+		return;
 	}
 
-	if (cultureName!="en")
+	var suportedCultures = requestLocalizationOptions.Value.SupportedUICultures;
+
+	if (suportedCultures==null || suportedCultures.Count<=1)
 	{
-		<a href="/ChangeCulture?culture=en" class="d-block nav-link text-dark">
-			English
-			<span class="fi fi-us"></span>
-		</a>
+		return;
 	}
+	var CurrentCultureName = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
 }
+<div class="d-flex">
+	@{
+		foreach (var item in suportedCultures)
+		{
+			var country = item.Name[3..].ToLower();
+			var language = item.NativeName[..(item.NativeName.IndexOf('(') - 1)];
+			if (CurrentCultureName!=item.Name)
+			{
+				<a href="/ChangeCulture/@(item.Name)" class="d-block nav-link text-dark">
+					@(language)
+					<span class="fi fi-@(country)"></span>
+				</a>
+			}
+
+		}
+	}
+</div>

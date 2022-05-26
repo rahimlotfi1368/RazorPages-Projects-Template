@@ -9,7 +9,8 @@ namespace Utilities
 {
 	public static class ProjectUtilities
 	{
-		public static void CreateCookie(HttpContext httpContext, string key, string value, int expireTime)
+        public readonly static string CookieName = "Culture.Cookie";
+        public static void CreateCookie(HttpContext httpContext, string key, string value, int expireTime)
 		{
 			CookieOptions option = new CookieOptions()
 			{
@@ -62,19 +63,16 @@ namespace Utilities
 			option.Expires = DateTime.Now.AddMonths(expireTime);
 			httpContext.Response.Cookies.Append(key, value, option);
 		}
-
 		public static void RemoveCookie(HttpContext httpContext, string key)
 		{
 			httpContext.Response.Cookies.Delete(key);
 		}
-
-		public static string ReadCookie(HttpContext httpContext, string key)
-		{
-			var value = httpContext.Request.Cookies[key];
-			return value != null ? value : string.Empty;
-		}
-
-		public static void SetCulture(string? cultureName)
+        public static string ReadCookie(HttpContext httpContext, string key)
+        {
+            var value = httpContext.Request.Cookies[key];
+            return value != null ? value : string.Empty;
+        }
+        public static void SetCulture(string? cultureName)
 		{
 			if (string.IsNullOrWhiteSpace(cultureName) == false)
 			{
@@ -85,6 +83,26 @@ namespace Utilities
 				System.Threading.Thread.CurrentThread.CurrentUICulture = cultureInfo;
 			}
 		}
+		public static string? GetCurrrentCultureName(HttpContext httpContext,IList<string>? supportedCultures)
+        {
+            if (supportedCultures?.Count==0 ||supportedCultures==null)
+            {
+				return null;
+            }
 
+			var culturreName= ReadCookie(httpContext, CookieName);
+
+            if (string.IsNullOrWhiteSpace(culturreName))
+            {
+				return null;
+            }
+
+            if (supportedCultures.Contains(culturreName)==false)
+            {
+				return null;
+            }
+
+			return culturreName;
+        }
 	}
 }
