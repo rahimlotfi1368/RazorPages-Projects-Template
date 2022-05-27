@@ -1,23 +1,22 @@
-﻿using Microsoft.Extensions.Options;
-namespace Infrastructure.Middlewares
+﻿namespace Infrastructure.Middlewares
 {
 	public class CultureCookieHandlerMiddlewares:Object
 	{
 		private RequestDelegate Next { get; }
-        public Microsoft.AspNetCore.Builder.RequestLocalizationOptions? RequestLocalizationOptions { get; }
+        public ApplicationSettings? ApplicationSettingOptions { get; }
 
         public CultureCookieHandlerMiddlewares(RequestDelegate next,
-			Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions>? requestLocalizationOptions) :base()
+			Microsoft.Extensions.Options.IOptions<ApplicationSettings>? applicationSettingOptions) :base()
 		{
 			Next = next;
-            RequestLocalizationOptions = requestLocalizationOptions?.Value;
+            ApplicationSettingOptions = applicationSettingOptions?.Value;
         }
 		
 		public async Task InvokeAsync(HttpContext httpContext)
 		{
-			var defaultCultureName = RequestLocalizationOptions?.DefaultRequestCulture.UICulture.Name;
+			var defaultCultureName = ApplicationSettingOptions?.CultureSettings?.DefaultCultureName;
 
-            var defaultCultureNames=RequestLocalizationOptions?.SupportedCultures?.Select(x => x.Name).ToList();
+			var defaultCultureNames = ApplicationSettingOptions?.CultureSettings?.SupportedCultureNames;
 
 			var cultureName = ProjectUtilities.GetCurrrentCultureName(httpContext, defaultCultureNames);
 

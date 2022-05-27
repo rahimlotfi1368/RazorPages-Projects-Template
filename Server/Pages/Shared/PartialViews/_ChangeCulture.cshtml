@@ -1,27 +1,38 @@
-﻿@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions>? requestLocalizationOptions
+﻿@inject Microsoft.Extensions.Options.IOptions<Infrastructure.Settings.ApplicationSettings>? applicationSettingOptions
 @{
-	if (requestLocalizationOptions==null || requestLocalizationOptions.Value==null)
+	var applicationSettings=applicationSettingOptions?.Value;
+
+	if (applicationSettings==null)
 	{
 		return;
 	}
 
-	var suportedCultures = requestLocalizationOptions.Value.SupportedUICultures;
-
-	if (suportedCultures==null || suportedCultures.Count<=1)
+	var cultureSettings=applicationSettings.CultureSettings;
+	
+	if (cultureSettings==null)
 	{
 		return;
 	}
+
+	var suportedCultureNames = applicationSettingOptions?.Value.CultureSettings?.SupportedCultureNames;
+
+	if (suportedCultureNames==null || suportedCultureNames.Length<=1)
+	{
+		return;
+	}
+
 	var CurrentCultureName = System.Threading.Thread.CurrentThread.CurrentUICulture.Name;
 }
 <div class="d-flex">
 	@{
-		foreach (var item in suportedCultures)
+		foreach (var suportedCultureName in suportedCultureNames)
 		{
-			var country = item.Name[3..].ToLower();
-			var language = item.NativeName[..(item.NativeName.IndexOf('(') - 1)];
-			if (CurrentCultureName!=item.Name)
+			var supportedCulture = new System.Globalization.CultureInfo(suportedCultureName);
+			var country = suportedCultureName[3..].ToLower();
+			var language = supportedCulture.NativeName[..(supportedCulture.NativeName.IndexOf('(') - 1)];
+			if (CurrentCultureName!=suportedCultureName)
 			{
-				<a href="/ChangeCulture/@(item.Name)" class="d-block nav-link text-dark">
+				<a href="/ChangeCulture/@(suportedCultureName)" class="d-block nav-link text-dark">
 					@(language)
 					<span class="fi fi-@(country)"></span>
 				</a>

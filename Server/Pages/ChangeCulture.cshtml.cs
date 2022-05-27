@@ -6,13 +6,13 @@ namespace Server.Pages
     public class ChangeCultureModel : Infrastructure.BasePageModel
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private RequestLocalizationOptions? RequestLocalizationOptions { get; }
+        private ApplicationSettings? ApplicationSettingOptions { get; }
 
         public ChangeCultureModel(IHttpContextAccessor httpContextAccessor,
-			Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions>? requestLocalizationOptions) :base()
+			Microsoft.Extensions.Options.IOptions<ApplicationSettings>? applicationSettingOptions) :base()
 		{
             _httpContextAccessor = httpContextAccessor;
-            RequestLocalizationOptions = requestLocalizationOptions?.Value;
+            ApplicationSettingOptions = applicationSettingOptions?.Value;
         }
 
 
@@ -27,18 +27,18 @@ namespace Server.Pages
                 return RedirectToPage("/Index");
 			}
 
-            var defaultCulture = RequestLocalizationOptions?.DefaultRequestCulture?.UICulture.Name;
+            var defaultCultureName = ApplicationSettingOptions?.CultureSettings?.DefaultCultureName;
 
-            var defaultCultureNames = RequestLocalizationOptions?.SupportedCultures?.Select(x => x.Name).ToList();
+            var defaultCultureNames = ApplicationSettingOptions?.CultureSettings?.SupportedCultureNames;
 
             if (string.IsNullOrEmpty(cultureName))
 			{
-                cultureName = defaultCulture;
+                cultureName = defaultCultureName;
 			}
 
             if (defaultCultureNames?.Contains(cultureName!)==false)
             {
-				cultureName = defaultCulture;
+				cultureName = defaultCultureName;
             }        
 
 			ProjectUtilities.SetCulture(cultureName);
